@@ -1,0 +1,48 @@
+syntax = "proto3";
+package api.v1.team;
+option go_package = "github.com/ecojuntak/laklak/team";
+
+import "google/api/annotations.proto";
+
+message Team {
+  int32 id = 1;
+  string name = 2;
+}
+
+message CreateTeamRequest {
+  string name = 1;
+}
+message CreateTeamResponse {}
+
+message GetTeamsRequest {}
+message GetTeamsResponse {
+  repeated Team teams = 1;
+}
+
+message GetTeamRequest {
+  int32 id = 1;
+}
+message GetTeamResponse {
+  Team team = 1;
+}
+
+service TeamService {
+  rpc Create(CreateTeamRequest) returns (CreateTeamResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/teams"
+      body: "*"
+    };
+  }
+
+  rpc Teams(GetTeamsRequest) returns (GetTeamsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/teams"
+    };
+  }
+
+  rpc Team(GetTeamRequest) returns (GetTeamResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/teams/{id}"
+    };
+  }
+}
