@@ -69,15 +69,16 @@ func (c *teamServiceClient) Team(ctx context.Context, in *GetTeamRequest, opts .
 }
 
 // TeamServiceServer is the server API for TeamService service.
-// All implementations should embed UnimplementedTeamServiceServer
+// All implementations must embed UnimplementedTeamServiceServer
 // for forward compatibility
 type TeamServiceServer interface {
 	Create(context.Context, *CreateTeamRequest) (*CreateTeamResponse, error)
 	Teams(context.Context, *GetTeamsRequest) (*GetTeamsResponse, error)
 	Team(context.Context, *GetTeamRequest) (*GetTeamResponse, error)
+	mustEmbedUnimplementedTeamServiceServer()
 }
 
-// UnimplementedTeamServiceServer should be embedded to have forward compatible implementations.
+// UnimplementedTeamServiceServer must be embedded to have forward compatible implementations.
 type UnimplementedTeamServiceServer struct {
 }
 
@@ -90,6 +91,7 @@ func (UnimplementedTeamServiceServer) Teams(context.Context, *GetTeamsRequest) (
 func (UnimplementedTeamServiceServer) Team(context.Context, *GetTeamRequest) (*GetTeamResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Team not implemented")
 }
+func (UnimplementedTeamServiceServer) mustEmbedUnimplementedTeamServiceServer() {}
 
 // UnsafeTeamServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to TeamServiceServer will

@@ -1,6 +1,6 @@
 generate:
 	rm -rf gen/**
-	cd proto; buf mod update
+	cd proto; buf dep update
 	buf build
 	buf generate
 
