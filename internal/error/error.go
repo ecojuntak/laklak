@@ -1,3 +1,5 @@
 package error
 
-const RecordNotFoundError = "DB record not found"
+import "errors"
+
+var RecordNotFoundError = errors.New("DB record not found")

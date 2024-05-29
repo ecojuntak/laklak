@@ -2,6 +2,7 @@ package team
 
 import (
 	"context"
+	"errors"
 
 	v1team "github.com/ecojuntak/laklak/gen/go/v1/team"
 	customError "github.com/ecojuntak/laklak/internal/error"
@@ -33,7 +34,7 @@ func (s *Server) Teams(ctx context.Context, request *v1team.GetTeamsRequest) (*v
 
 func (s *Server) Team(ctx context.Context, request *v1team.GetTeamRequest) (*v1team.GetTeamResponse, error) {
 	team, err := s.Repository.Team(ctx, request.Id)
-	if err.Error() == customError.RecordNotFoundError {
+	if errors.Is(err, customError.RecordNotFoundError) {
 		return &v1team.GetTeamResponse{}, status.Error(5, "team not found")
 	}
 	return &v1team.GetTeamResponse{Team: team}, err

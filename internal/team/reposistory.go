@@ -32,7 +32,7 @@ func (r repository) Teams(ctx context.Context) (teams []*v1team.Team, err error)
 func (r repository) Team(ctx context.Context, id int32) (team *v1team.Team, err error) {
 	result := r.db.WithContext(ctx).Find(&v1team.Team{Id: id}).First(&team)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return nil, errors.New(customError.RecordNotFoundError)
+		return nil, customError.RecordNotFoundError
 	}
 	return team, result.Error
 }
