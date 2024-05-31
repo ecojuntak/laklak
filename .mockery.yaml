@@ -1,0 +1,10 @@
+with-expecter: True
+filename: "{{.InterfaceName|snakecase}}.go"
+dir: "mocks/{{.PackageName}}"
+packages:
+  github.com/ecojuntak/laklak:
+    config:
+      recursive: true
+      all: true
+      exclude:
+        - gen
