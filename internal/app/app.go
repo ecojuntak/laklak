@@ -15,6 +15,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 	"gorm.io/gorm"
+
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 )
 
 type app struct {
@@ -25,7 +27,9 @@ type app struct {
 }
 
 func New(db *gorm.DB) app {
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(
+		grpc.StatsHandler(otelgrpc.NewServerHandler()),
+	)
 	reflection.Register(grpcServer)
 
 	teamRepository := team.NewRepository(db)
@@ -40,6 +44,9 @@ func New(db *gorm.DB) app {
 }
 
 func (a app) StartGrpcServer(port string) {
+	sdk, _ := setupOTelSDK(context.Background())
+	defer sdk(context.TODO())
+
 	address := fmt.Sprintf("0.0.0.0:%s", port)
 	a.logger.Info(fmt.Sprintf("grpc app start on %s", address))
 
