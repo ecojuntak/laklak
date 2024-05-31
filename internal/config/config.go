@@ -48,7 +48,7 @@ func LoadConfig(configFile string) (err error) {
 	}
 
 	if err := viper.Unmarshal(&mainConfig); err != nil {
-		slog.Error("error unmarshilling config: %s\n", err.Error())
+		slog.Error("error unmarshilling config: %s\n", "error", err.Error())
 	}
 
 	return
