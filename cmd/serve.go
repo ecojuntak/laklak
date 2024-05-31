@@ -19,7 +19,7 @@ var serveCmd = &cobra.Command{
 		dbConnection := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", config.Database.Username, config.Database.Password, config.Database.Host, config.Database.Port, config.Database.Name)
 		db, err := gorm.Open(postgres.Open(dbConnection), &gorm.Config{})
 		if err != nil {
-			slog.Error("cannot connect to database: %s", err.Error())
+			slog.Error("cannot connect to database: %s", "error", err.Error())
 			panic(err.Error())
 		}
 
