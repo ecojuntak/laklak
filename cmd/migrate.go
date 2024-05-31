@@ -1,8 +1,9 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
-	"log"
+	"log/slog"
 
 	"github.com/ecojuntak/laklak/internal/config"
 	"github.com/golang-migrate/migrate/v4"
@@ -18,15 +19,15 @@ var migrateCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		db := config.DatabaseConfig()
 		dbConnection := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", db.Username, db.Password, db.Host, db.Port, db.Name)
-		m, err := migrate.New("file://./migrations", dbConnection)
+		m, err := migrate.New("file://internal/migrations", dbConnection)
 		if err != nil {
-			log.Fatalf("error creating database migrator: %s", err)
+			slog.Error("error creating database migrator", "error", err)
 			return err
 		}
 
 		err = m.Up()
-		if err == migrate.ErrNoChange {
-			log.Println("no database migration changes")
+		if errors.Is(err, migrate.ErrNoChange) {
+			slog.Info("no database migration changes")
 			return nil
 		}
 
