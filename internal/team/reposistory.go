@@ -27,16 +27,16 @@ func (r repository) Create(ctx context.Context, team *v1team.Team) (err error) {
 	return result.Error
 }
 
-func (r repository) Teams(ctx context.Context) (teams []*v1team.Team, err error) {
-	ctx, span := tracer.Start(ctx, "repository.Teams")
+func (r repository) GetTeams(ctx context.Context) (teams []*v1team.Team, err error) {
+	ctx, span := tracer.Start(ctx, "repository.GetTeams")
 	defer span.End()
 
 	result := r.db.WithContext(ctx).Find(&teams)
 	return teams, result.Error
 }
 
-func (r repository) Team(ctx context.Context, id int32) (team *v1team.Team, err error) {
-	ctx, span := tracer.Start(ctx, "repository.Team")
+func (r repository) GetTeam(ctx context.Context, id int32) (team *v1team.Team, err error) {
+	ctx, span := tracer.Start(ctx, "repository.GetTeam")
 	defer span.End()
 
 	result := r.db.WithContext(ctx).Find(&v1team.Team{Id: id}).First(&team)

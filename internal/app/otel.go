@@ -2,12 +2,11 @@ package app
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/exporters/stdout/stdoutlog"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/log"
@@ -19,56 +18,34 @@ import (
 
 var serviceName = semconv.ServiceNameKey.String("laklak-service")
 
-func setupOTelSDK(ctx context.Context) (shutdown func(context.Context) error, err error) {
-	var shutdownFuncs []func(context.Context) error
-
-	shutdown = func(ctx context.Context) error {
-		var err error
-		for _, fn := range shutdownFuncs {
-			err = errors.Join(err, fn(ctx))
-		}
-		shutdownFuncs = nil
-		return err
-	}
-
-	handleErr := func(inErr error) {
-		err = errors.Join(inErr, shutdown(ctx))
-	}
-
+func setupOTelSDK(ctx context.Context) error {
 	prop := newPropagator()
 	otel.SetTextMapPropagator(prop)
 
-	res, err := resource.New(ctx,
-		resource.WithAttributes(serviceName),
-	)
+	res, err := resource.New(ctx, resource.WithAttributes(serviceName))
+	if err != nil {
+		return err
+	}
 
 	tracerProvider, err := newTraceProvider(ctx, res)
 	if err != nil {
-		handleErr(err)
-		return
+		return err
 	}
-	shutdownFuncs = append(shutdownFuncs, tracerProvider.Shutdown)
 	otel.SetTracerProvider(tracerProvider)
 
-	//Set up meter provider.
-	//meterProvider, err := newMeterProvider(ctx, res)
-	//if err != nil {
-	//	handleErr(err)
-	//	return
-	//}
-	//shutdownFuncs = append(shutdownFuncs, meterProvider.Shutdown)
-	//otel.SetMeterProvider(meterProvider)
+	meterProvider, err := newMeterProvider(ctx, res)
+	if err != nil {
+		return err
+	}
+	otel.SetMeterProvider(meterProvider)
 
-	// Set up logger provider.
 	//loggerProvider, err := newLoggerProvider()
 	//if err != nil {
-	//	handleErr(err)
-	//	return
+	//	return err
 	//}
-	//shutdownFuncs = append(shutdownFuncs, loggerProvider.Shutdown)
 	//global.SetLoggerProvider(loggerProvider)
 
-	return
+	return nil
 }
 
 func newPropagator() propagation.TextMapPropagator {
@@ -79,7 +56,7 @@ func newPropagator() propagation.TextMapPropagator {
 }
 
 func newTraceProvider(ctx context.Context, res *resource.Resource) (*trace.TracerProvider, error) {
-	traceExporter, err := otlptracehttp.New(ctx)
+	traceExporter, err := otlptracegrpc.New(ctx)
 	if err != nil {
 		return nil, err
 	}

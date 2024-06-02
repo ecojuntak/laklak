@@ -34,13 +34,13 @@ service TeamService {
     };
   }
 
-  rpc Teams(GetTeamsRequest) returns (GetTeamsResponse) {
+  rpc GetTeams(GetTeamsRequest) returns (GetTeamsResponse) {
     option (google.api.http) = {
       get: "/api/v1/teams"
     };
   }
 
-  rpc Team(GetTeamRequest) returns (GetTeamResponse) {
+  rpc GetTeam(GetTeamRequest) returns (GetTeamResponse) {
     option (google.api.http) = {
       get: "/api/v1/teams/{id}"
     };

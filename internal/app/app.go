@@ -44,8 +44,9 @@ func New(db *gorm.DB) app {
 }
 
 func (a app) StartGrpcServer(port string) {
-	sdk, _ := setupOTelSDK(context.Background())
-	defer sdk(context.TODO())
+	err := setupOTelSDK(context.Background())
+	if err != nil {
+	}
 
 	address := fmt.Sprintf("0.0.0.0:%s", port)
 	a.logger.Info(fmt.Sprintf("grpc app start on %s", address))

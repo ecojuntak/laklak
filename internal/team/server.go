@@ -19,8 +19,8 @@ type Server struct {
 
 type Repository interface {
 	Create(ctx context.Context, team *v1team.Team) error
-	Teams(ctx context.Context) ([]*v1team.Team, error)
-	Team(ctx context.Context, id int32) (*v1team.Team, error)
+	GetTeams(ctx context.Context) ([]*v1team.Team, error)
+	GetTeam(ctx context.Context, id int32) (*v1team.Team, error)
 }
 
 func (s *Server) Create(ctx context.Context, request *v1team.CreateTeamRequest) (*v1team.CreateTeamResponse, error) {
@@ -37,19 +37,19 @@ func (s *Server) Create(ctx context.Context, request *v1team.CreateTeamRequest) 
 	return &v1team.CreateTeamResponse{}, err
 }
 
-func (s *Server) Teams(ctx context.Context, request *v1team.GetTeamsRequest) (*v1team.GetTeamsResponse, error) {
-	ctx, span := tracer.Start(ctx, "server.Teams")
+func (s *Server) GetTeams(ctx context.Context, request *v1team.GetTeamsRequest) (*v1team.GetTeamsResponse, error) {
+	ctx, span := tracer.Start(ctx, "server.GetTeams")
 	defer span.End()
 
-	teams, err := s.Repository.Teams(ctx)
+	teams, err := s.Repository.GetTeams(ctx)
 	return &v1team.GetTeamsResponse{Teams: teams}, err
 }
 
-func (s *Server) Team(ctx context.Context, request *v1team.GetTeamRequest) (*v1team.GetTeamResponse, error) {
-	ctx, span := tracer.Start(ctx, "server.Team")
+func (s *Server) GetTeam(ctx context.Context, request *v1team.GetTeamRequest) (*v1team.GetTeamResponse, error) {
+	ctx, span := tracer.Start(ctx, "server.GetTeam")
 	defer span.End()
 
-	team, err := s.Repository.Team(ctx, request.Id)
+	team, err := s.Repository.GetTeam(ctx, request.Id)
 	if errors.Is(err, customError.RecordNotFoundError) {
 		return &v1team.GetTeamResponse{}, status.Error(5, "team not found")
 	}

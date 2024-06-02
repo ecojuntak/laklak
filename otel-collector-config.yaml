@@ -10,11 +10,13 @@ processors:
   batch:
 
 exporters:
-  otlp/jaeger:
+  otlp:
     endpoint: jaeger:4317
     tls:
       insecure: true
       insecure_skip_verify: true
+  prometheus:
+    endpoint: 0.0.0.0:8889
 
 #extensions:
 #  health_check:
@@ -27,11 +29,11 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp/jaeger]
-#    metrics:
-#      receivers: [otlp]
-#      processors: [batch]
-#      exporters: [otlp]
+      exporters: [otlp]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus]
 #    logs:
 #      receivers: [otlp]
 #      processors: [batch]

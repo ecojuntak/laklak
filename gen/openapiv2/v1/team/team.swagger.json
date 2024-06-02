@@ -18,7 +18,7 @@
   "paths": {
     "/api/v1/teams": {
       "get": {
-        "operationId": "TeamService_Teams",
+        "operationId": "TeamService_GetTeams",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -70,7 +70,7 @@
     },
     "/api/v1/teams/{id}": {
       "get": {
-        "operationId": "TeamService_Team",
+        "operationId": "TeamService_GetTeam",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -144,7 +144,7 @@
       "type": "object",
       "properties": {
         "team": {
-          "$ref": "#/definitions/v1teamTeam"
+          "$ref": "#/definitions/teamTeam"
         }
       }
     },
@@ -155,12 +155,12 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1teamTeam"
+            "$ref": "#/definitions/teamTeam"
           }
         }
       }
     },
-    "v1teamTeam": {
+    "teamTeam": {
       "type": "object",
       "properties": {
         "id": {

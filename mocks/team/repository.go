@@ -48,7 +48,7 @@ type MockRepository_Create_Call struct {
 
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
-//   - _a1 *team.Team
+//   - _a1 *team.GetTeam
 func (_e *MockRepository_Expecter) Create(ctx interface{}, _a1 interface{}) *MockRepository_Create_Call {
 	return &MockRepository_Create_Call{Call: _e.mock.On("Create", ctx, _a1)}
 }
@@ -71,11 +71,11 @@ func (_c *MockRepository_Create_Call) RunAndReturn(run func(context.Context, *te
 }
 
 // Team provides a mock function with given fields: ctx, id
-func (_m *MockRepository) Team(ctx context.Context, id int32) (*team.Team, error) {
+func (_m *MockRepository) GetTeam(ctx context.Context, id int32) (*team.Team, error) {
 	ret := _m.Called(ctx, id)
 
 	if len(ret) == 0 {
-		panic("no return value specified for Team")
+		panic("no return value specified for GetTeam")
 	}
 
 	var r0 *team.Team
@@ -100,7 +100,7 @@ func (_m *MockRepository) Team(ctx context.Context, id int32) (*team.Team, error
 	return r0, r1
 }
 
-// MockRepository_Team_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Team'
+// MockRepository_Team_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTeam'
 type MockRepository_Team_Call struct {
 	*mock.Call
 }
@@ -109,7 +109,7 @@ type MockRepository_Team_Call struct {
 //   - ctx context.Context
 //   - id int32
 func (_e *MockRepository_Expecter) Team(ctx interface{}, id interface{}) *MockRepository_Team_Call {
-	return &MockRepository_Team_Call{Call: _e.mock.On("Team", ctx, id)}
+	return &MockRepository_Team_Call{Call: _e.mock.On("GetTeam", ctx, id)}
 }
 
 func (_c *MockRepository_Team_Call) Run(run func(ctx context.Context, id int32)) *MockRepository_Team_Call {
@@ -130,11 +130,11 @@ func (_c *MockRepository_Team_Call) RunAndReturn(run func(context.Context, int32
 }
 
 // Teams provides a mock function with given fields: ctx
-func (_m *MockRepository) Teams(ctx context.Context) ([]*team.Team, error) {
+func (_m *MockRepository) GetTeams(ctx context.Context) ([]*team.Team, error) {
 	ret := _m.Called(ctx)
 
 	if len(ret) == 0 {
-		panic("no return value specified for Teams")
+		panic("no return value specified for GetTeams")
 	}
 
 	var r0 []*team.Team
@@ -159,7 +159,7 @@ func (_m *MockRepository) Teams(ctx context.Context) ([]*team.Team, error) {
 	return r0, r1
 }
 
-// MockRepository_Teams_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Teams'
+// MockRepository_Teams_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTeams'
 type MockRepository_Teams_Call struct {
 	*mock.Call
 }
@@ -167,7 +167,7 @@ type MockRepository_Teams_Call struct {
 // Teams is a helper method to define mock.On call
 //   - ctx context.Context
 func (_e *MockRepository_Expecter) Teams(ctx interface{}) *MockRepository_Teams_Call {
-	return &MockRepository_Teams_Call{Call: _e.mock.On("Teams", ctx)}
+	return &MockRepository_Teams_Call{Call: _e.mock.On("GetTeams", ctx)}
 }
 
 func (_c *MockRepository_Teams_Call) Run(run func(ctx context.Context)) *MockRepository_Teams_Call {
