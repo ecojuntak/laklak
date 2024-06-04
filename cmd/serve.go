@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log/slog"
+	"os"
 
 	"github.com/ecojuntak/laklak/internal/app"
 	"github.com/ecojuntak/laklak/internal/config"
@@ -22,6 +23,8 @@ var serveCmd = &cobra.Command{
 			slog.Error("cannot connect to database: %s", "error", err.Error())
 			panic(err.Error())
 		}
+
+		slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
 
 		app := app.New(db)
 		go func() {

@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"net"
 	"net/http"
-	"os"
 
 	v1team "github.com/ecojuntak/laklak/gen/go/v1/team"
 	"github.com/ecojuntak/laklak/internal/team"
@@ -22,7 +21,6 @@ import (
 type app struct {
 	grpcServer *grpc.Server
 	httpServer *runtime.ServeMux
-	logger     *slog.Logger
 	db         *gorm.DB
 }
 
@@ -39,7 +37,6 @@ func New(db *gorm.DB) app {
 		grpcServer: grpcServer,
 		httpServer: runtime.NewServeMux(),
 		db:         db,
-		logger:     slog.New(slog.NewJSONHandler(os.Stdout, nil)),
 	}
 }
 
@@ -49,13 +46,13 @@ func (a app) StartGrpcServer(port string) {
 	}
 
 	address := fmt.Sprintf("0.0.0.0:%s", port)
-	a.logger.Info(fmt.Sprintf("grpc app start on %s", address))
+	slog.Info(fmt.Sprintf("grpc app start on %s", address))
 
 	if l, err := net.Listen("tcp", address); err != nil {
-		a.logger.Error(fmt.Sprintf("error in listening on %s", address), "err", err)
+		slog.Error(fmt.Sprintf("error in listening on %s", address), "err", err)
 	} else {
 		if err := a.grpcServer.Serve(l); err != nil {
-			a.logger.Error("unable to start grpcServer", "err", err)
+			slog.Error("unable to start grpcServer", "err", err)
 		}
 	}
 }
@@ -64,7 +61,7 @@ func (a app) StartHTTPServer(grpcPort, httpPort string) {
 	grpcAddress := fmt.Sprintf("0.0.0.0:%s", grpcPort)
 	err := v1team.RegisterTeamServiceHandlerFromEndpoint(context.Background(), a.httpServer, grpcAddress, []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())})
 	if err != nil {
-		a.logger.Error("error when registering team service handler", "err", err)
+		slog.Error("error when registering team service handler", "err", err)
 		panic(err)
 	}
 
@@ -74,8 +71,8 @@ func (a app) StartHTTPServer(grpcPort, httpPort string) {
 		Handler: a.httpServer,
 	}
 
-	a.logger.Info(fmt.Sprintf("http app start on %s", httpAddress))
+	slog.Info(fmt.Sprintf("http app start on %s", httpAddress))
 	if err = server.ListenAndServe(); err != nil {
-		a.logger.Error("error when starting http app", "err", err)
+		slog.Error("error when starting http app", "err", err)
 	}
 }

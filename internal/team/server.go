@@ -3,6 +3,7 @@ package team
 import (
 	"context"
 	"errors"
+	"log/slog"
 
 	v1team "github.com/ecojuntak/laklak/gen/go/v1/team"
 	customError "github.com/ecojuntak/laklak/internal/error"
@@ -27,6 +28,8 @@ func (s *Server) Create(ctx context.Context, request *v1team.CreateTeamRequest) 
 	ctx, span := tracer.Start(ctx, "server.Create")
 	defer span.End()
 
+	slog.Info("incoming request to create team")
+
 	err := s.Repository.Create(ctx, &v1team.Team{
 		Name: request.Name,
 	})
@@ -41,6 +44,8 @@ func (s *Server) GetTeams(ctx context.Context, request *v1team.GetTeamsRequest) 
 	ctx, span := tracer.Start(ctx, "server.GetTeams")
 	defer span.End()
 
+	slog.Info("incoming request to get teams")
+
 	teams, err := s.Repository.GetTeams(ctx)
 	return &v1team.GetTeamsResponse{Teams: teams}, err
 }
@@ -48,6 +53,8 @@ func (s *Server) GetTeams(ctx context.Context, request *v1team.GetTeamsRequest) 
 func (s *Server) GetTeam(ctx context.Context, request *v1team.GetTeamRequest) (*v1team.GetTeamResponse, error) {
 	ctx, span := tracer.Start(ctx, "server.GetTeam")
 	defer span.End()
+
+	slog.Info("incoming request to get team")
 
 	team, err := s.Repository.GetTeam(ctx, request.Id)
 	if errors.Is(err, customError.RecordNotFoundError) {
