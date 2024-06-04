@@ -7,9 +7,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
-	"go.opentelemetry.io/otel/exporters/stdout/stdoutlog"
 	"go.opentelemetry.io/otel/propagation"
-	"go.opentelemetry.io/otel/sdk/log"
 	"go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
@@ -38,12 +36,6 @@ func setupOTelSDK(ctx context.Context) error {
 		return err
 	}
 	otel.SetMeterProvider(meterProvider)
-
-	//loggerProvider, err := newLoggerProvider()
-	//if err != nil {
-	//	return err
-	//}
-	//global.SetLoggerProvider(loggerProvider)
 
 	return nil
 }
@@ -81,16 +73,4 @@ func newMeterProvider(ctx context.Context, res *resource.Resource) (*metric.Mete
 		metric.WithResource(res),
 	)
 	return meterProvider, nil
-}
-
-func newLoggerProvider() (*log.LoggerProvider, error) {
-	logExporter, err := stdoutlog.New()
-	if err != nil {
-		return nil, err
-	}
-
-	loggerProvider := log.NewLoggerProvider(
-		log.WithProcessor(log.NewBatchProcessor(logExporter)),
-	)
-	return loggerProvider, nil
 }
