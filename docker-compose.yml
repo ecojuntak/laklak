@@ -31,19 +31,31 @@ services:
     image: prom/prometheus:latest
     restart: always
     volumes:
-      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./infrastructures/prometheus.yaml:/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
-#  hotrod:
-#    image: jaegertracing/example-hotrod:${JAEGER_VERSION:-latest}
-#    # To run the latest trunk build, find the tag at Docker Hub and use the line below
-#    # https://hub.docker.com/r/jaegertracing/example-hotrod-snapshot/tags
-#    #image: jaegertracing/example-hotrod-snapshot:0ab8f2fcb12ff0d10830c1ee3bb52b745522db6c
-#    ports:
-#      - "8080:8080"
-#      - "8083:8083"
-#    command: [ "all" ]
-#    environment:
-#      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
-#    depends_on:
-#      - jaeger
+  loki:
+    image: grafana/loki:2.9.2
+    ports:
+      - 3100:3100
+    command: -config.file=/etc/loki/loki.yaml
+    volumes:
+      - ./infrastructures/loki.yaml:/etc/loki/loki.yaml
+  grafana:
+    image: grafana/grafana:9.1.6
+    ports:
+      - 3000:3000
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+    volumes:
+      - ./infrastructures/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+  promtail:
+    image: grafana/promtail:2.9.2
+    volumes:
+      - ./infrastructures/promtail.yaml:/etc/promtail/promtail.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9080:9080
+    command: -config.file=/etc/promtail/promtail.yaml -config.expand-env=true
