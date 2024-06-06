@@ -37,7 +37,9 @@ func (s *Server) Create(ctx context.Context, request *v1team.CreateTeamRequest) 
 	if err != nil {
 		return nil, err
 	}
-	return &v1team.CreateTeamResponse{}, err
+	return &v1team.CreateTeamResponse{
+		Message: "new team created",
+	}, err
 }
 
 func (s *Server) GetTeams(ctx context.Context, request *v1team.GetTeamsRequest) (*v1team.GetTeamsResponse, error) {

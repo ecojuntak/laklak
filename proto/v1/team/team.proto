@@ -3,6 +3,7 @@ package api.v1.team;
 option go_package = "github.com/ecojuntak/laklak/team";
 
 import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
 
 message Team {
   int32 id = 1;
@@ -10,9 +11,11 @@ message Team {
 }
 
 message CreateTeamRequest {
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
-message CreateTeamResponse {}
+message CreateTeamResponse {
+  string message = 1;
+}
 
 message GetTeamsRequest {}
 message GetTeamsResponse {
@@ -20,7 +23,7 @@ message GetTeamsResponse {
 }
 
 message GetTeamRequest {
-  int32 id = 1;
+  int32 id = 1 [(google.api.field_behavior) = REQUIRED];
 }
 message GetTeamResponse {
   Team team = 1;
