@@ -3,7 +3,6 @@ package team
 import (
 	"context"
 	"errors"
-	"log/slog"
 
 	v1team "github.com/ecojuntak/laklak/gen/go/v1/team"
 	customError "github.com/ecojuntak/laklak/internal/error"
@@ -55,10 +54,11 @@ func (s *Server) GetTeams(ctx context.Context, request *v1team.GetTeamsRequest) 
 	ctx, span := tracer.Start(ctx, "server.GetTeams")
 	defer span.End()
 
-	slog.Info("incoming request to get teams")
-
 	teams, err := s.Repository.GetTeams(ctx)
-	return &v1team.GetTeamsResponse{Teams: teams}, err
+	if err != nil {
+		return nil, status.Error(codes.Internal, "error getting teams")
+	}
+	return &v1team.GetTeamsResponse{Teams: teams}, nil
 }
 
 func (s *Server) GetTeam(ctx context.Context, request *v1team.GetTeamRequest) (*v1team.GetTeamResponse, error) {

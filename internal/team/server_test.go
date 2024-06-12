@@ -239,3 +239,91 @@ func TestServer_GetTeam(t *testing.T) {
 		})
 	}
 }
+
+func TestServer_GetTeams(t *testing.T) {
+	type fields struct {
+		Repository *teamMock.MockRepository
+	}
+	type args struct {
+		ctx     context.Context
+		request *v1team.GetTeamsRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *v1team.GetTeamsResponse
+		wantErr error
+		mockFn  func(aa args, ff fields)
+	}{
+		{
+			name: "should success get teams",
+			fields: fields{
+				Repository: new(teamMock.MockRepository),
+			},
+			args: args{
+				ctx:     context.TODO(),
+				request: &v1team.GetTeamsRequest{},
+			},
+			want: &v1team.GetTeamsResponse{
+				Teams: []*v1team.Team{
+					{
+						Id:   1,
+						Name: "foo",
+					},
+					{
+						Id:   2,
+						Name: "bar",
+					},
+				},
+			},
+			wantErr: nil,
+			mockFn: func(aa args, ff fields) {
+				teams := []*v1team.Team{
+					{
+						Id:   1,
+						Name: "foo",
+					},
+					{
+						Id:   2,
+						Name: "bar",
+					},
+				}
+				ff.Repository.Mock.
+					On("GetTeams", mock.Anything).
+					Return(teams, nil)
+			},
+		},
+		{
+			name: "should return empty response if repository fails",
+			fields: fields{
+				Repository: new(teamMock.MockRepository),
+			},
+			args: args{
+				ctx:     context.TODO(),
+				request: &v1team.GetTeamsRequest{},
+			},
+			want:    nil,
+			wantErr: status.Error(codes.Internal, "error getting teams"),
+			mockFn: func(aa args, ff fields) {
+				ff.Repository.Mock.
+					On("GetTeams", mock.Anything).
+					Return(nil, errors.New("repository failure"))
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &Server{
+				Repository: tt.fields.Repository,
+			}
+
+			tt.mockFn(tt.args, tt.fields)
+			response, err := s.GetTeams(tt.args.ctx, tt.args.request)
+			assert.Equal(t, tt.wantErr, err)
+			assert.Equal(t, tt.want, response)
+			tt.fields.Repository.AssertExpectations(t)
+		})
+	}
+}
