@@ -3,10 +3,12 @@ package app
 import (
 	"context"
 	"fmt"
+	"log"
 	"log/slog"
 	"net"
 	"net/http"
 
+	"github.com/bufbuild/protovalidate-go"
 	v1team "github.com/ecojuntak/laklak/gen/go/v1/team"
 	"github.com/ecojuntak/laklak/internal/team"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -30,8 +32,13 @@ func New(db *gorm.DB) app {
 	)
 	reflection.Register(grpcServer)
 
+	validator, err := protovalidate.New()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	teamRepository := team.NewRepository(db)
-	v1team.RegisterTeamServiceServer(grpcServer, &team.Server{Repository: teamRepository})
+	v1team.RegisterTeamServiceServer(grpcServer, &team.Server{Repository: teamRepository, Validator: validator})
 
 	return app{
 		grpcServer: grpcServer,

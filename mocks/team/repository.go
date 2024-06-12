@@ -48,7 +48,7 @@ type MockRepository_Create_Call struct {
 
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
-//   - _a1 *team.GetTeam
+//   - _a1 *team.Team
 func (_e *MockRepository_Expecter) Create(ctx interface{}, _a1 interface{}) *MockRepository_Create_Call {
 	return &MockRepository_Create_Call{Call: _e.mock.On("Create", ctx, _a1)}
 }
@@ -70,7 +70,7 @@ func (_c *MockRepository_Create_Call) RunAndReturn(run func(context.Context, *te
 	return _c
 }
 
-// Team provides a mock function with given fields: ctx, id
+// GetTeam provides a mock function with given fields: ctx, id
 func (_m *MockRepository) GetTeam(ctx context.Context, id int32) (*team.Team, error) {
 	ret := _m.Called(ctx, id)
 
@@ -100,36 +100,36 @@ func (_m *MockRepository) GetTeam(ctx context.Context, id int32) (*team.Team, er
 	return r0, r1
 }
 
-// MockRepository_Team_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTeam'
-type MockRepository_Team_Call struct {
+// MockRepository_GetTeam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTeam'
+type MockRepository_GetTeam_Call struct {
 	*mock.Call
 }
 
-// Team is a helper method to define mock.On call
+// GetTeam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id int32
-func (_e *MockRepository_Expecter) Team(ctx interface{}, id interface{}) *MockRepository_Team_Call {
-	return &MockRepository_Team_Call{Call: _e.mock.On("GetTeam", ctx, id)}
+func (_e *MockRepository_Expecter) GetTeam(ctx interface{}, id interface{}) *MockRepository_GetTeam_Call {
+	return &MockRepository_GetTeam_Call{Call: _e.mock.On("GetTeam", ctx, id)}
 }
 
-func (_c *MockRepository_Team_Call) Run(run func(ctx context.Context, id int32)) *MockRepository_Team_Call {
+func (_c *MockRepository_GetTeam_Call) Run(run func(ctx context.Context, id int32)) *MockRepository_GetTeam_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(context.Context), args[1].(int32))
 	})
 	return _c
 }
 
-func (_c *MockRepository_Team_Call) Return(_a0 *team.Team, _a1 error) *MockRepository_Team_Call {
+func (_c *MockRepository_GetTeam_Call) Return(_a0 *team.Team, _a1 error) *MockRepository_GetTeam_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockRepository_Team_Call) RunAndReturn(run func(context.Context, int32) (*team.Team, error)) *MockRepository_Team_Call {
+func (_c *MockRepository_GetTeam_Call) RunAndReturn(run func(context.Context, int32) (*team.Team, error)) *MockRepository_GetTeam_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// Teams provides a mock function with given fields: ctx
+// GetTeams provides a mock function with given fields: ctx
 func (_m *MockRepository) GetTeams(ctx context.Context) ([]*team.Team, error) {
 	ret := _m.Called(ctx)
 
@@ -159,30 +159,30 @@ func (_m *MockRepository) GetTeams(ctx context.Context) ([]*team.Team, error) {
 	return r0, r1
 }
 
-// MockRepository_Teams_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTeams'
-type MockRepository_Teams_Call struct {
+// MockRepository_GetTeams_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTeams'
+type MockRepository_GetTeams_Call struct {
 	*mock.Call
 }
 
-// Teams is a helper method to define mock.On call
+// GetTeams is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockRepository_Expecter) Teams(ctx interface{}) *MockRepository_Teams_Call {
-	return &MockRepository_Teams_Call{Call: _e.mock.On("GetTeams", ctx)}
+func (_e *MockRepository_Expecter) GetTeams(ctx interface{}) *MockRepository_GetTeams_Call {
+	return &MockRepository_GetTeams_Call{Call: _e.mock.On("GetTeams", ctx)}
 }
 
-func (_c *MockRepository_Teams_Call) Run(run func(ctx context.Context)) *MockRepository_Teams_Call {
+func (_c *MockRepository_GetTeams_Call) Run(run func(ctx context.Context)) *MockRepository_GetTeams_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(context.Context))
 	})
 	return _c
 }
 
-func (_c *MockRepository_Teams_Call) Return(_a0 []*team.Team, _a1 error) *MockRepository_Teams_Call {
+func (_c *MockRepository_GetTeams_Call) Return(_a0 []*team.Team, _a1 error) *MockRepository_GetTeams_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockRepository_Teams_Call) RunAndReturn(run func(context.Context) ([]*team.Team, error)) *MockRepository_Teams_Call {
+func (_c *MockRepository_GetTeams_Call) RunAndReturn(run func(context.Context) ([]*team.Team, error)) *MockRepository_GetTeams_Call {
 	_c.Call.Return(run)
 	return _c
 }

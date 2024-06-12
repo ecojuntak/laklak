@@ -9,11 +9,14 @@ import (
 	teamMock "github.com/ecojuntak/laklak/mocks/team"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func TestServer_Create(t *testing.T) {
 	type fields struct {
 		Repository *teamMock.MockRepository
+		Validator  *teamMock.MockValidator
 	}
 	type args struct {
 		ctx     context.Context
@@ -31,6 +34,7 @@ func TestServer_Create(t *testing.T) {
 			name: "should success create team",
 			fields: fields{
 				Repository: new(teamMock.MockRepository),
+				Validator:  new(teamMock.MockValidator),
 			},
 			args: args{
 				ctx: context.TODO(),
@@ -38,18 +42,23 @@ func TestServer_Create(t *testing.T) {
 					Name: "test",
 				},
 			},
-			want:    &v1team.CreateTeamResponse{},
+			want: &v1team.CreateTeamResponse{
+				Message: "new team created",
+			},
 			wantErr: nil,
 			mockFn: func(aa args, ff fields) {
 				ff.Repository.Mock.
 					On("Create", mock.Anything, &v1team.Team{Name: aa.request.Name}).
 					Return(nil)
+
+				ff.Validator.On("Validate", aa.request).Return(nil)
 			},
 		},
 		{
 			name: "should return empty response if repository fails",
 			fields: fields{
 				Repository: new(teamMock.MockRepository),
+				Validator:  new(teamMock.MockValidator),
 			},
 			args: args{
 				ctx: context.TODO(),
@@ -63,6 +72,26 @@ func TestServer_Create(t *testing.T) {
 				ff.Repository.Mock.
 					On("Create", mock.Anything, &v1team.Team{Name: aa.request.Name}).
 					Return(errors.New("repository failure"))
+
+				ff.Validator.On("Validate", aa.request).Return(nil)
+			},
+		},
+		{
+			name: "should return error if validation failed",
+			fields: fields{
+				Repository: new(teamMock.MockRepository),
+				Validator:  new(teamMock.MockValidator),
+			},
+			args: args{
+				ctx: context.TODO(),
+				request: &v1team.CreateTeamRequest{
+					Name: "",
+				},
+			},
+			want:    nil,
+			wantErr: status.Error(codes.InvalidArgument, "team name is required"),
+			mockFn: func(aa args, ff fields) {
+				ff.Validator.On("Validate", aa.request).Return(errors.New("validation failed"))
 			},
 		},
 	}
@@ -70,6 +99,7 @@ func TestServer_Create(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &Server{
 				Repository: tt.fields.Repository,
+				Validator:  tt.fields.Validator,
 			}
 
 			tt.mockFn(tt.args, tt.fields)
@@ -77,6 +107,7 @@ func TestServer_Create(t *testing.T) {
 			assert.Equal(t, tt.wantErr, err)
 			assert.Equal(t, tt.want, response)
 			tt.fields.Repository.AssertExpectations(t)
+			tt.fields.Validator.AssertExpectations(t)
 		})
 	}
 }

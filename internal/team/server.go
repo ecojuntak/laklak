@@ -8,7 +8,9 @@ import (
 	v1team "github.com/ecojuntak/laklak/gen/go/v1/team"
 	customError "github.com/ecojuntak/laklak/internal/error"
 	"go.opentelemetry.io/otel"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 )
 
 var tracer = otel.Tracer("go.opentelemetry.io/otel")
@@ -16,6 +18,7 @@ var tracer = otel.Tracer("go.opentelemetry.io/otel")
 type Server struct {
 	v1team.UnimplementedTeamServiceServer
 	Repository Repository
+	Validator  Validator
 }
 
 type Repository interface {
@@ -24,11 +27,17 @@ type Repository interface {
 	GetTeam(ctx context.Context, id int32) (*v1team.Team, error)
 }
 
+type Validator interface {
+	Validate(msg proto.Message) error
+}
+
 func (s *Server) Create(ctx context.Context, request *v1team.CreateTeamRequest) (*v1team.CreateTeamResponse, error) {
 	ctx, span := tracer.Start(ctx, "server.Create")
 	defer span.End()
 
-	slog.Info("incoming request to create team")
+	if err := s.Validator.Validate(request); err != nil {
+		return nil, status.Error(codes.InvalidArgument, "team name is required")
+	}
 
 	err := s.Repository.Create(ctx, &v1team.Team{
 		Name: request.Name,
@@ -39,7 +48,7 @@ func (s *Server) Create(ctx context.Context, request *v1team.CreateTeamRequest) 
 	}
 	return &v1team.CreateTeamResponse{
 		Message: "new team created",
-	}, err
+	}, status.Error(codes.OK, "")
 }
 
 func (s *Server) GetTeams(ctx context.Context, request *v1team.GetTeamsRequest) (*v1team.GetTeamsResponse, error) {
