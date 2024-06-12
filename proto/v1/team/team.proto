@@ -24,7 +24,7 @@ message GetTeamsResponse {
 }
 
 message GetTeamRequest {
-  int32 id = 1 [(google.api.field_behavior) = REQUIRED];
+  int32 id = 1 [(google.api.field_behavior) = REQUIRED, (buf.validate.field).required = true];
 }
 message GetTeamResponse {
   Team team = 1;

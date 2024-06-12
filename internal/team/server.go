@@ -65,11 +65,13 @@ func (s *Server) GetTeam(ctx context.Context, request *v1team.GetTeamRequest) (*
 	ctx, span := tracer.Start(ctx, "server.GetTeam")
 	defer span.End()
 
-	slog.Info("incoming request to get team")
+	if err := s.Validator.Validate(request); err != nil {
+		return nil, status.Error(codes.InvalidArgument, "team ID is required")
+	}
 
 	team, err := s.Repository.GetTeam(ctx, request.Id)
 	if errors.Is(err, customError.RecordNotFoundError) {
-		return &v1team.GetTeamResponse{}, status.Error(5, "team not found")
+		return nil, status.Error(codes.NotFound, "team not found")
 	}
-	return &v1team.GetTeamResponse{Team: team}, err
+	return &v1team.GetTeamResponse{Team: team}, status.Error(codes.OK, "")
 }
