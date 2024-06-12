@@ -68,7 +68,7 @@ func TestServer_Create(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.New("repository failure"),
+			wantErr: status.Error(codes.Internal, "error creating team"),
 			mockFn: func(aa args, ff fields) {
 				ff.Repository.Mock.
 					On("Create", mock.Anything, &v1team.Team{Name: aa.request.Name}).

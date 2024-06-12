@@ -44,7 +44,7 @@ func (s *Server) Create(ctx context.Context, request *v1team.CreateTeamRequest) 
 	})
 
 	if err != nil {
-		return nil, err
+		return nil, status.Error(codes.Internal, "error creating team")
 	}
 	return &v1team.CreateTeamResponse{
 		Message: "new team created",
