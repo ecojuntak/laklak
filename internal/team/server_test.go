@@ -204,6 +204,24 @@ func TestServer_GetTeam(t *testing.T) {
 				ff.Validator.On("Validate", aa.request).Return(nil)
 			},
 		},
+		{
+			name: "should return error if validation failed",
+			fields: fields{
+				Repository: new(teamMock.MockRepository),
+				Validator:  new(teamMock.MockValidator),
+			},
+			args: args{
+				ctx: context.TODO(),
+				request: &v1team.GetTeamRequest{
+					Id: 1,
+				},
+			},
+			want:    nil,
+			wantErr: status.Error(codes.InvalidArgument, "team ID is required"),
+			mockFn: func(aa args, ff fields) {
+				ff.Validator.On("Validate", aa.request).Return(errors.New("validation failed"))
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
