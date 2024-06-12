@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	v1team "github.com/ecojuntak/laklak/gen/go/v1/team"
+	customError "github.com/ecojuntak/laklak/internal/error"
 	teamMock "github.com/ecojuntak/laklak/mocks/team"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -155,6 +156,50 @@ func TestServer_GetTeam(t *testing.T) {
 						Id:   1,
 						Name: "test",
 					}, nil)
+
+				ff.Validator.On("Validate", aa.request).Return(nil)
+			},
+		},
+		{
+			name: "should return empty response if repository fails",
+			fields: fields{
+				Repository: new(teamMock.MockRepository),
+				Validator:  new(teamMock.MockValidator),
+			},
+			args: args{
+				ctx: context.TODO(),
+				request: &v1team.GetTeamRequest{
+					Id: 1,
+				},
+			},
+			want:    nil,
+			wantErr: status.Error(codes.Internal, "error getting team"),
+			mockFn: func(aa args, ff fields) {
+				ff.Repository.Mock.
+					On("GetTeam", mock.Anything, aa.request.Id).
+					Return(nil, errors.New("repository failure"))
+
+				ff.Validator.On("Validate", aa.request).Return(nil)
+			},
+		},
+		{
+			name: "should return not found response if repository return not found",
+			fields: fields{
+				Repository: new(teamMock.MockRepository),
+				Validator:  new(teamMock.MockValidator),
+			},
+			args: args{
+				ctx: context.TODO(),
+				request: &v1team.GetTeamRequest{
+					Id: 1,
+				},
+			},
+			want:    nil,
+			wantErr: status.Error(codes.NotFound, "team not found"),
+			mockFn: func(aa args, ff fields) {
+				ff.Repository.Mock.
+					On("GetTeam", mock.Anything, aa.request.Id).
+					Return(nil, customError.RecordNotFoundError)
 
 				ff.Validator.On("Validate", aa.request).Return(nil)
 			},

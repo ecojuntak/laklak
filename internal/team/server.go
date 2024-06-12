@@ -72,6 +72,8 @@ func (s *Server) GetTeam(ctx context.Context, request *v1team.GetTeamRequest) (*
 	team, err := s.Repository.GetTeam(ctx, request.Id)
 	if errors.Is(err, customError.RecordNotFoundError) {
 		return nil, status.Error(codes.NotFound, "team not found")
+	} else if err != nil {
+		return nil, status.Error(codes.Internal, "error getting team")
 	}
 	return &v1team.GetTeamResponse{Team: team}, status.Error(codes.OK, "")
 }
