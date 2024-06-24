@@ -10,7 +10,8 @@ install-dependencies:
         github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
         google.golang.org/protobuf/cmd/protoc-gen-go \
         google.golang.org/grpc/cmd/protoc-gen-go-grpc \
-        github.com/vektra/mockery/v2
+        github.com/vektra/mockery/v2 \
+		github.com/mfridman/tparse@latest
 
 generate-mock:
 	rm -rf mocks
@@ -30,4 +31,4 @@ compose-up:
 
 test:
 	go clean -testcache
-	go test -cover ./...
+	go test ./... -cover -race -count=1 -v -json | tparse
