@@ -11,7 +11,7 @@ install-dependencies:
         google.golang.org/protobuf/cmd/protoc-gen-go \
         google.golang.org/grpc/cmd/protoc-gen-go-grpc \
         github.com/vektra/mockery/v2 \
-		github.com/mfridman/tparse@latest
+        github.com/mfridman/tparse
 
 generate-mock:
 	rm -rf mocks
