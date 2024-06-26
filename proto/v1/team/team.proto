@@ -1,14 +1,16 @@
 syntax = "proto3";
-package api.v1.team;
+package v1.team;
 option go_package = "github.com/ecojuntak/laklak/team";
 
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 import "buf/validate/validate.proto";
+import "v1/application/application.proto";
 
 message Team {
   int32 id = 1;
   string name = 2;
+  repeated application.Application applications = 3;
 }
 
 message CreateTeamRequest {

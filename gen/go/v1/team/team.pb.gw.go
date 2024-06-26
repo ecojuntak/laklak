@@ -141,7 +141,7 @@ func RegisterTeamServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/api.v1.team.TeamService/Create", runtime.WithHTTPPathPattern("/api/v1/teams"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/v1.team.TeamService/Create", runtime.WithHTTPPathPattern("/api/v1/teams"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -166,7 +166,7 @@ func RegisterTeamServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/api.v1.team.TeamService/GetTeams", runtime.WithHTTPPathPattern("/api/v1/teams"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/v1.team.TeamService/GetTeams", runtime.WithHTTPPathPattern("/api/v1/teams"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -191,7 +191,7 @@ func RegisterTeamServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/api.v1.team.TeamService/GetTeam", runtime.WithHTTPPathPattern("/api/v1/teams/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/v1.team.TeamService/GetTeam", runtime.WithHTTPPathPattern("/api/v1/teams/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -255,7 +255,7 @@ func RegisterTeamServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/api.v1.team.TeamService/Create", runtime.WithHTTPPathPattern("/api/v1/teams"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/v1.team.TeamService/Create", runtime.WithHTTPPathPattern("/api/v1/teams"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -277,7 +277,7 @@ func RegisterTeamServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/api.v1.team.TeamService/GetTeams", runtime.WithHTTPPathPattern("/api/v1/teams"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/v1.team.TeamService/GetTeams", runtime.WithHTTPPathPattern("/api/v1/teams"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -299,7 +299,7 @@ func RegisterTeamServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/api.v1.team.TeamService/GetTeam", runtime.WithHTTPPathPattern("/api/v1/teams/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/v1.team.TeamService/GetTeam", runtime.WithHTTPPathPattern("/api/v1/teams/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

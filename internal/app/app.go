@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/bufbuild/protovalidate-go"
+	v1application "github.com/ecojuntak/laklak/gen/go/v1/application"
 	v1team "github.com/ecojuntak/laklak/gen/go/v1/team"
 	"github.com/ecojuntak/laklak/internal/team"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -69,6 +70,12 @@ func (a app) StartHTTPServer(grpcPort, httpPort string) {
 	err := v1team.RegisterTeamServiceHandlerFromEndpoint(context.Background(), a.httpServer, grpcAddress, []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())})
 	if err != nil {
 		slog.Error("error when registering team service handler", "err", err)
+		panic(err)
+	}
+
+	err = v1application.RegisterApplicationServiceHandlerFromEndpoint(context.Background(), a.httpServer, grpcAddress, []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())})
+	if err != nil {
+		slog.Error("error when registering application service handler", "err", err)
 		panic(err)
 	}
 

@@ -1,6 +1,6 @@
 generate:
-	rm -rf gen/**
-	cd proto; buf dep update
+	rm -rf gen/go gen/openapiv2
+	buf dep update
 	buf build
 	buf generate
 

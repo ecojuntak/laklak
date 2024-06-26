@@ -25,4 +25,4 @@ managed:
       module: buf.build/bufbuild/protovalidate
   override:
     - file_option: go_package_prefix
-      value: github.com/ecojuntak/laklak/proto
+      value: github.com/ecojuntak/laklak/gen/go

@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	TeamService_Create_FullMethodName   = "/api.v1.team.TeamService/Create"
-	TeamService_GetTeams_FullMethodName = "/api.v1.team.TeamService/GetTeams"
-	TeamService_GetTeam_FullMethodName  = "/api.v1.team.TeamService/GetTeam"
+	TeamService_Create_FullMethodName   = "/v1.team.TeamService/Create"
+	TeamService_GetTeams_FullMethodName = "/v1.team.TeamService/GetTeams"
+	TeamService_GetTeam_FullMethodName  = "/v1.team.TeamService/GetTeam"
 )
 
 // TeamServiceClient is the client API for TeamService service.
@@ -165,7 +165,7 @@ func _TeamService_GetTeam_Handler(srv interface{}, ctx context.Context, dec func
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var TeamService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.v1.team.TeamService",
+	ServiceName: "v1.team.TeamService",
 	HandlerType: (*TeamServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

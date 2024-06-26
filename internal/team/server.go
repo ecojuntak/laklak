@@ -31,7 +31,7 @@ type Validator interface {
 }
 
 func (s *Server) Create(ctx context.Context, request *v1team.CreateTeamRequest) (*v1team.CreateTeamResponse, error) {
-	ctx, span := tracer.Start(ctx, "server.Create")
+	ctx, span := tracer.Start(ctx, "team.server.Create")
 	defer span.End()
 
 	if err := s.Validator.Validate(request); err != nil {
@@ -51,7 +51,7 @@ func (s *Server) Create(ctx context.Context, request *v1team.CreateTeamRequest) 
 }
 
 func (s *Server) GetTeams(ctx context.Context, request *v1team.GetTeamsRequest) (*v1team.GetTeamsResponse, error) {
-	ctx, span := tracer.Start(ctx, "server.GetTeams")
+	ctx, span := tracer.Start(ctx, "team.server.GetTeams")
 	defer span.End()
 
 	teams, err := s.Repository.GetTeams(ctx)
@@ -62,7 +62,7 @@ func (s *Server) GetTeams(ctx context.Context, request *v1team.GetTeamsRequest) 
 }
 
 func (s *Server) GetTeam(ctx context.Context, request *v1team.GetTeamRequest) (*v1team.GetTeamResponse, error) {
-	ctx, span := tracer.Start(ctx, "server.GetTeam")
+	ctx, span := tracer.Start(ctx, "team.server.GetTeam")
 	defer span.End()
 
 	if err := s.Validator.Validate(request); err != nil {

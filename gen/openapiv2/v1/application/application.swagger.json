@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "v1/team/team.proto",
+    "title": "v1/application/application.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "TeamService"
+      "name": "ApplicationService"
     }
   ],
   "consumes": [
@@ -16,14 +16,14 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/teams": {
+    "/api/v1/applications": {
       "get": {
-        "operationId": "TeamService_GetTeams",
+        "operationId": "ApplicationService_GetApplications",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/teamGetTeamsResponse"
+              "$ref": "#/definitions/applicationGetApplicationsResponse"
             }
           },
           "default": {
@@ -34,16 +34,16 @@
           }
         },
         "tags": [
-          "TeamService"
+          "ApplicationService"
         ]
       },
       "post": {
-        "operationId": "TeamService_Create",
+        "operationId": "ApplicationService_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/teamCreateTeamResponse"
+              "$ref": "#/definitions/applicationCreateResponse"
             }
           },
           "default": {
@@ -59,23 +59,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/teamCreateTeamRequest"
+              "$ref": "#/definitions/applicationCreateRequest"
             }
           }
         ],
         "tags": [
-          "TeamService"
+          "ApplicationService"
         ]
       }
     },
-    "/api/v1/teams/{id}": {
+    "/api/v1/applications/{id}": {
       "get": {
-        "operationId": "TeamService_GetTeam",
+        "operationId": "ApplicationService_GetApplication",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/teamGetTeamResponse"
+              "$ref": "#/definitions/applicationGetApplicationResponse"
             }
           },
           "default": {
@@ -95,7 +95,7 @@
           }
         ],
         "tags": [
-          "TeamService"
+          "ApplicationService"
         ]
       }
     }
@@ -114,6 +114,50 @@
         },
         "name": {
           "type": "string"
+        }
+      }
+    },
+    "applicationCreateRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "teamId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "name",
+        "teamId"
+      ]
+    },
+    "applicationCreateResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "applicationGetApplicationResponse": {
+      "type": "object",
+      "properties": {
+        "team": {
+          "$ref": "#/definitions/applicationApplication"
+        }
+      }
+    },
+    "applicationGetApplicationsResponse": {
+      "type": "object",
+      "properties": {
+        "applications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/applicationApplication"
+          }
         }
       }
     },
@@ -141,64 +185,6 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/protobufAny"
-          }
-        }
-      }
-    },
-    "teamCreateTeamRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "name"
-      ]
-    },
-    "teamCreateTeamResponse": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string"
-        }
-      }
-    },
-    "teamGetTeamResponse": {
-      "type": "object",
-      "properties": {
-        "team": {
-          "$ref": "#/definitions/teamTeam"
-        }
-      }
-    },
-    "teamGetTeamsResponse": {
-      "type": "object",
-      "properties": {
-        "teams": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/teamTeam"
-          }
-        }
-      }
-    },
-    "teamTeam": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "name": {
-          "type": "string"
-        },
-        "applications": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/applicationApplication"
           }
         }
       }
