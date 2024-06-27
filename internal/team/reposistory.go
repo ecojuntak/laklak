@@ -39,7 +39,7 @@ func (r repository) GetTeam(ctx context.Context, id int32) (team *v1team.Team, e
 	ctx, span := tracer.Start(ctx, "repository.GetTeam")
 	defer span.End()
 
-	result := r.db.WithContext(ctx).Find(&v1team.Team{Id: id}).First(&team)
+	result := r.db.WithContext(ctx).Preload("Applications").Find(&v1team.Team{Id: id}).First(&team)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, customError.RecordNotFoundError
 	}
